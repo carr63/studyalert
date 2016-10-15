@@ -25,7 +25,7 @@ public class Stack {
      */
     public Stack(String name){
         if(subjects.size() == 0){
-            subjects.add("Hello");
+            subjects.add("DEFAULT");
         }
         subject = "DEFAULT";
         this.name = name;
