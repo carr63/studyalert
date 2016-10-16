@@ -1,11 +1,20 @@
 package com.example.carr63.hello_world;
 
-import java.util.ArrayList;
+import android.app.Activity;
+import android.content.Context;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Random;
+import java.lang.Object;
+import android.content.Context;
 /**
  * Created by carr63 on 10/15/16.
  */
+
 public class Stack {
+    private static ArrayList<Stack> stacks = new ArrayList<>();
     private static ArrayList<String> subjects = new ArrayList<String>();
     private String name;
     private String subject;
@@ -32,13 +41,18 @@ public class Stack {
         words = new ArrayList<Card>();
         frequency = NORMAL;
         active = false;
+
+        stacks.add(this);
+
+
+
     }
 
     /**
      * @constructor
      * @param name - name of the stack
-     * @param frequency - frequency of the stack, 0 - rare, 1 - uncommon, 2 - normal, 3 - common,
-     *                    4 - often
+     * @param frequency - frequency of the stack, 1 - rare, 2 - uncommon, 3 - normal, 4 - common,
+     *                    5 - often
      */
     public Stack(String name, int frequency){
         this(name);
@@ -146,6 +160,10 @@ public class Stack {
         }
     }
 
+    public void switchActive() {
+        this.active = !active;
+    }
+
     /**
      * Sets the frequency of the stack to the parem
      * @param frequency the frequency of the stack
@@ -157,4 +175,84 @@ public class Stack {
     public ArrayList<Card> getWords(){
         return words;
     }
+
+
+    /**
+     * @return a new ArrayList, containing only the active stacks
+     */
+    public static ArrayList<Stack> getActiveStacks() {
+        ArrayList<Stack> activeStacks= new ArrayList<>();
+        for (int i = 0; i < stacks.size(); i++) {
+            if (stacks.get(i).active) {
+                activeStacks.add(stacks.get(i));
+            }
+        }
+
+        return activeStacks;
+    }
+
+    /**
+     *
+     * @param list the ArrayList of Stacks you wish to pull a random Stack from
+     * @return a random Stack taken from the inputted list
+     */
+    public static Stack getRandomStack(ArrayList<Stack> list) {
+        Random r = new Random();
+        int arrayLength = list.size();
+        return list.get(r.nextInt(arrayLength));
+
+    }
+
+    /**
+     *
+     * @return a single Card from a Stack that was selected based on weighted frequency
+     */
+    public static Card getCard() {
+        ArrayList<Stack> activeStacks = getActiveStacks();
+        ArrayList<Stack> weightedActiveStacks = new ArrayList<>();
+        for (int i = 0; i < activeStacks.size(); i++) {
+            for (int j = 0; j < activeStacks.get(i).frequency; j++ ) {
+                weightedActiveStacks.add(activeStacks.get(i));
+            }
+        }
+
+        Stack chosenStack = getRandomStack(weightedActiveStacks);
+
+        Random r = new Random();
+        return chosenStack.words.get(r.nextInt(chosenStack.words.size()));
+
+    }
+
+    @Override
+    public String toString(){
+        String string = "";
+        string+= "[" + this.getName() + ": " + this.getFrequency() + " (";
+        for(int x = 0; x<this.getWords().size();x++){
+            string += words.get(x).getWord() + " - " +
+                     words.get(x).getDefinition() + ", ";
+        }
+        string += ")]";
+        return string;
+    }
+
+    public static void saveStacks(Activity activity, String filename, ArrayList<Stack> stacks){
+        String STACKS = filename;
+        String stacksString = "";
+        Context context = activity.getApplicationContext();
+        for(int x = 0; x<stacks.size();x++){
+            stacksString+= stacks.get(x).toString();
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(STACKS, Context.MODE_PRIVATE);
+            fos.write(stacksString.getBytes());
+            fos.close();
+        }catch(Exception e){
+
+        }
+
+
+
+    }
+
 }
