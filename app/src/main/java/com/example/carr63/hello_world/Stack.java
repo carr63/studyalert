@@ -275,7 +275,7 @@ public class Stack {
     @Override
     public String toString(){
         String string = "";
-        string+= "[" + this.getName() + ": " + this.getFrequency() + " (";
+        string+= "[" + this.getName() + ": " + this.getFrequency() + "/" + this.active + " (";
         for(int x = 0; x<this.getWords().size();x++){
             string += words.get(x).getWord() + " - " +
                      words.get(x).getDefinition() + ", ";
@@ -284,12 +284,58 @@ public class Stack {
         return string;
     }
 
+    /**
+     * Converts the string back into a arraylist of stacks
+     * @param string the string
+     * @return the arraylist of stacks
+     */
+    public static ArrayList<Stack> toStack(String string){
+        String name = "";
+        ArrayList<Stack>  stacks = new ArrayList<>();
+        int frequency;
+        boolean active;
+        Stack temp;
+        String strings[] = string.split("[\n|\r]");
+
+            for(int x = 0; x<strings.length;x++){
+                name = strings[x].substring(strings[x].indexOf("[")+1, strings[x].indexOf(": "));
+                frequency = Integer.parseInt(strings[x].substring(strings[x].indexOf(":")+
+                            1,strings[x].indexOf("/")));
+                active = Boolean.parseBoolean(strings[x].substring(strings[x].indexOf("/")+1,
+                         strings[x].indexOf(" (")));
+                temp = new Stack(name,frequency);
+                temp.active = active;
+
+                String[] splits = strings[x].substring(strings[x].indexOf("(")+1,
+                                  strings[x].indexOf(")")).split("[,]");
+
+
+                for(int y = 0; y<splits.length;y++){
+                    if(y == splits.length-1){
+                        temp.add(new Card(splits[y].substring(0,splits[y].indexOf("-")-2),
+                                splits[y].substring(splits[y].indexOf("-")+1,
+                                        splits[y].indexOf(")"))));
+                    }else {
+
+                        temp.add(new Card(splits[y].substring(0, splits[y].indexOf("-") - 2),
+                                splits[y].substring(splits[y].indexOf("-") + 1)));
+                    }
+                }
+                stacks.add(temp);
+            }
+
+
+        return stacks;
+    }
+    
+
     public static void saveStacks(Activity activity, String filename, ArrayList<Stack> stacks){
         String STACKS = filename;
         String stacksString = "";
         Context context = activity.getApplicationContext();
         for(int x = 0; x<stacks.size();x++){
             stacksString+= stacks.get(x).toString();
+            stacksString+= "\n";
         }
 
         try {
@@ -299,6 +345,21 @@ public class Stack {
         }catch(Exception e){
 
         }
+
+
+    }
+
+    public static ArrayList<Stack> loadStacks(Activity activity, String filename){
+        Context context = activity.getApplicationContext();
+        try {
+            InputStream ips = context.openFileInput(filename);
+            Scanner s = new Scanner(ips).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            return toStack(result);
+        }catch(Exception e){
+
+        }
+        return toStack("");
 
 
 
