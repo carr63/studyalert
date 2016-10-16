@@ -1,2 +1,2 @@
-# studyalert
-This Is a Project for the Hello World Freshmen Purdue Hackaton
+# Study Alert!
+This app does things, with some pretty pictures included.
