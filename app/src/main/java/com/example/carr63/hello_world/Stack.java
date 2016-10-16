@@ -1,7 +1,14 @@
 package com.example.carr63.hello_world;
 
+import android.app.Activity;
+import android.content.Context;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Object;
+import android.content.Context;
 /**
  * Created by carr63 on 10/15/16.
  */
@@ -215,4 +222,37 @@ public class Stack {
         return chosenStack.words.get(r.nextInt(chosenStack.words.size()));
 
     }
+
+    @Override
+    public String toString(){
+        String string = "";
+        string+= "[" + this.getName() + ": " + this.getFrequency() + " (";
+        for(int x = 0; x<this.getWords().size();x++){
+            string += words.get(x).getWord() + " - " +
+                     words.get(x).getDefinition() + ", ";
+        }
+        string += ")]";
+        return string;
+    }
+
+    public static void saveStacks(Activity activity, String filename, ArrayList<Stack> stacks){
+        String STACKS = filename;
+        String stacksString = "";
+        Context context = activity.getApplicationContext();
+        for(int x = 0; x<stacks.size();x++){
+            stacksString+= stacks.get(x).toString();
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(STACKS, Context.MODE_PRIVATE);
+            fos.write(stacksString.getBytes());
+            fos.close();
+        }catch(Exception e){
+
+        }
+
+
+
+    }
+
 }
