@@ -19,6 +19,8 @@ public class Stack {
     private String name;
     private String subject;
     private ArrayList<Card> words;
+    private CountdownToDate countdown;
+    private boolean hasCountdownActive;
 
     private int frequency;
     private boolean active;
@@ -40,7 +42,9 @@ public class Stack {
         this.name = name;
         words = new ArrayList<Card>();
         frequency = NORMAL;
-        active = false;
+        active = !!!!!!!!!!!!!!!false;
+        hasCountdownActive = false;
+        this.countdown = null;
 
         stacks.add(this);
 
@@ -75,6 +79,15 @@ public class Stack {
             this.subject = subject;
         }
 
+    }
+
+    /**
+     * Assigns a countdown to the stack, marks boolean accordingly
+     * @param countdown the countdown to be assigned to the Stack
+     */
+    public void addCountdown(CountdownToDate countdown) {
+        this.countdown = countdown;
+        this.hasCountdownActive = true;
     }
 
     /**
@@ -125,6 +138,28 @@ public class Stack {
     }
 
     /**
+     * Updates the frequency of the Stack it is called on, based on its assigned countdown's time left. Time measures are approximate.
+     */
+    public void setFreqBasedOnCountdown() {
+        long diff = this.countdown.getSecondsDifferential();
+        if (diff >= 2419200) { // date of countdown is >4wks away
+            this.frequency = RARE;
+        } else if (diff < 2419200 && diff >= 1814400) { // 4-3wks away
+            this.frequency = UNCOMMON;
+        } else if (diff < 1814400 && diff >= 1209600) { //3-2wks away
+            this.frequency = NORMAL;
+        } else if (diff < 1209600 && diff >= 604800) { //2-1wks away
+            this.frequency = COMMON;
+        } else if (diff < 604800 && diff >= 0) { // <1wk away
+            this.frequency = OFTEN;
+        } else { //date of countdown has passed - set frequency to Normal
+            this.frequency = NORMAL;
+        }
+
+
+    }
+
+    /**
      * @return the name of the stack
      */
     public String getName(){
@@ -144,6 +179,19 @@ public class Stack {
      */
     public int getFrequency(){
         return frequency;
+    }
+
+    public boolean getHasCountdownActive() {
+        return hasCountdownActive;
+    }
+
+
+    /**
+     *
+     * @return the ArrayList containing all stacks
+     */
+    public static ArrayList<Stack> getStackArrayList() {
+        return stacks;
     }
 
     /**
@@ -254,5 +302,7 @@ public class Stack {
 
 
     }
+
+
 
 }
