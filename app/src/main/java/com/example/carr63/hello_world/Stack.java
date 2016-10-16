@@ -155,6 +155,7 @@ public class Stack {
         } else { //date of countdown has passed - set frequency to Normal
             this.frequency = NORMAL;
         }
+        this.active = false;
 
 
     }
