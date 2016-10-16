@@ -1,0 +1,62 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#FFFFFF"
+    tools:context="com.example.patel600.studyalert.MainScreenActivity"
+    android:id="@+id/table">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Stack Name"
+            android:editable="false"
+            android:textSize="25.0dp"
+            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:width="175.0dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:id="@+id/stackNameText" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner" />
+
+    </TableRow>
+
+    <!--<TextView android:id="@+id/fullscreen_content" android:layout_width="match_parent"
+        android:layout_height="match_parent" android:gravity="center" android:keepScreenOn="true"
+        android:text="@string/dummy_content" android:textColor="#33b5e5" android:textSize="50sp"
+        android:textStyle="bold" />-->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top">
+
+        <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/contentBar"
+            android:text = />-->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create new Study Stack"
+            android:id="@+id/newStackBtn"
+            android:onClick="newStackOnClick" />
+
+    </LinearLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+</TableLayout>
